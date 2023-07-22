@@ -2,58 +2,37 @@ import pygame
 import pygame_gui
 
 from local import WINDOW_SIZE, FPS
-from local import IMAGE_PATHS
+from MenuGUI import MenuGUI
 from GameLoader import GameLoader
 from Messanger import Messanger
 
 
-pygame.init()
-pygame.display.set_caption("21")
-screen = pygame.display.set_mode(WINDOW_SIZE)
-
-manager = pygame_gui.UIManager(WINDOW_SIZE)
-start_button = pygame_gui.elements.UIButton(
-    relative_rect=pygame.Rect((100, 200), (300, 100)),
-    text='ИГРАТЬ',
-    manager=manager
-)
-rules_button = pygame_gui.elements.UIButton(
-    relative_rect=pygame.Rect((100, 350), (300, 100)),
-    text='ПРАВИЛА',
-    manager=manager
-)
-quit_button = pygame_gui.elements.UIButton(
-    relative_rect=pygame.Rect((100, 500), (300, 100)),
-    text='ВЫХОД',
-    manager=manager
-)
-with open(r'data\rules.txt', mode='rt', encoding='UTF-8') as file:
-    rules = file.read()
-menu_background = pygame.image.load(IMAGE_PATHS["menu_background"])
-
-
 def main():
     game_loader = GameLoader()
+    menu_gui = MenuGUI()
     main_menu_messanger = Messanger()
     main_menu_messanger.background_screen_color = pygame.Color(20, 20, 20, 255)
     main_menu_messanger.message_font_size = 30
+
     clock = pygame.time.Clock()
+
     running = True
     while running:
         for event in pygame.event.get().copy():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == start_button:
+                if event.ui_element == menu_gui.start_button:
                     game_loader.load(screen)
-                elif event.ui_element == rules_button:
-                    main_menu_messanger.show_message(rules, screen)
-                elif event.ui_element == quit_button:
+                elif event.ui_element == menu_gui.rules_button:
+                    main_menu_messanger.show_message(menu_gui.rules, screen)
+                elif event.ui_element == menu_gui.quit_button:
                     running = False
-            manager.process_events(event)
-        manager.update(FPS)
-        screen.blit(menu_background, (0, 0))
-        manager.draw_ui(screen)
+            menu_gui.manager.process_events(event)
+
+        menu_gui.manager.update(FPS)
+        screen.blit(menu_gui.menu_background, (0, 0))
+        menu_gui.manager.draw_ui(screen)
 
         pygame.display.flip()
         clock.tick(FPS)
@@ -61,4 +40,7 @@ def main():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    pygame.display.set_caption("21")
+    screen = pygame.display.set_mode(WINDOW_SIZE)
     main()
