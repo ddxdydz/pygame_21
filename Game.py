@@ -62,7 +62,7 @@ class Game:
             elif self.computer.get_win_distance() > self.player.get_win_distance():
                 self.player_win()
             else:  # Ничья
-                self.show_message(MESSAGES["Ничья"])
+                self.show_message(MESSAGES["draw"])
                 self.restart()
 
     def check_over(self):
