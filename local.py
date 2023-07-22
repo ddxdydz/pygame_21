@@ -13,6 +13,7 @@ COORDINATES_OF_POSITIONS = {
 }
 IMAGE_PATHS = {
     "background": r"data\background.png",
+    "menu_background": r"data\menu_background.png",
     "player_profile": r"data\comp.png",
     "computer_profile": r"data\player.png",
     "win_mark": r"data\win_marker.png",
