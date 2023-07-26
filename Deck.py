@@ -13,7 +13,7 @@ class Deck:
         self.restart()
 
     def transfer_card_for_object(self, obj):
-        if self.deck:
+        if self.deck and obj.get_count_cards() < 8:
             transfer_card = self.deck.pop(-1)  # Удаляем последнюю карту из колоды
             obj.add_card(transfer_card)  # Передаем эту карту получателю
 
@@ -22,8 +22,8 @@ class Deck:
 
     def restart(self):
         self.deck.clear()
-        for card_id in CARDS_IDS:
-            self.deck.append(Card(card_id, self.coordinates))
+        for card_id in CARDS_IDS:  # Заполнение колоды картами с весами
+            self.deck.append(Card(coordinates=self.coordinates, image_id=card_id, weight=int(card_id)))
         shuffle(self.deck)  # Мешаем колоду
 
     def draw(self, screen_for_draw):
