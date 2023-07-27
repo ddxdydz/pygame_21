@@ -22,8 +22,11 @@ COORDINATES_OF_POSITIONS = {
     "pass_button": (921, 309)
 }
 COUNT_OF_PIXELS_FOR_RAISING = 20
+SOUND_PATHS = {
+    "menu": r"data\sounds\menu_music.mp3",
+    "game": r"data\sounds\game_music.mp3"
+}
 IMAGE_PATHS = {
-    "background": r"data\background.png",
     "menu_background": r"data\menu_background.png",
     "player_profile": r"data\comp.png",
     "computer_profile": r"data\player.png",
@@ -46,7 +49,7 @@ IMAGE_PATHS = {
     "Table3": r"data\Table3.png",
     "Table2": r"data\Table2.png",
     "Table1": r"data\Table1.png",
-    "icon.png": r"data\icon.png",
+    "icon": r"data\icon.png",
     "lose_marker2": r"data\lose_marker2.png",
     "lose_marker1": r"data\lose_marker1.png",
     "lose_marker": r"data\lose_marker.png",

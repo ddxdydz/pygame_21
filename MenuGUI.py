@@ -3,6 +3,7 @@ import pygame_gui
 
 from local import IMAGE_PATHS
 from local import WINDOW_SIZE
+from Messanger import Messanger
 
 
 class MenuGUI:
@@ -26,3 +27,9 @@ class MenuGUI:
         with open(r'data\rules.txt', mode='rt', encoding='UTF-8') as file:
             self.rules = file.read()
         self.menu_background = pygame.image.load(IMAGE_PATHS["menu_background"])
+        self.main_menu_messanger = Messanger()
+        self.main_menu_messanger.background_screen_color = pygame.Color(20, 20, 20, 255)
+        self.main_menu_messanger.message_font_size = 30
+
+    def show_rules(self, screen_for_draw):
+        self.main_menu_messanger.show_message(self.rules, screen_for_draw)
