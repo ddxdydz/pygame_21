@@ -100,6 +100,7 @@ class Game:
     def update(self, events, screen_for_draw):
         self.screen = screen_for_draw
 
+        mover = self.current_mover
         move_res = self.current_mover.get_a_move(events=events, game=self)
         if move_res == "get":
             if self.deck.get_count_cards() == 0:
@@ -118,4 +119,6 @@ class Game:
 
         # FOR DEBUGS:
         if move_res == "get" or move_res == "pass":
-            print(move_res, self.current_mover)
+            print(move_res, mover)
+            # print(list(map(lambda card: card.get_weight(), self.deck.get_deck())))
+            print("-----")

@@ -1,6 +1,3 @@
-import pygame
-from time import sleep
-
 from local import COORDINATES_OF_POSITIONS
 from Player import Player
 from WeightCard import WeightCard
@@ -40,29 +37,24 @@ class Computer(Player):
         return False
 
     def check_bonus_cards(self, game):
+        weight_from_deck = game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0
         for pos_id, card in enumerate(self.deck):
-
             if type(card) == BonusCardTake:
                 # Проверяем наличие карты в колоде:
                 for deck_card_pos_id, deck_card in enumerate(game.deck.get_deck()):
                     if type(deck_card) == WeightCard:
                         if deck_card.get_weight() == card.card_weight_to_take:  # Если карта есть в колоде
-                            # если следующая карта из колоды не принесёт выгоды
-                            if not self.is_profit(game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0):
-                                # если применение карты принесёт выгоду
-                                weight = card.card_weight_to_take
-                                if self.is_profit(weight):
+                            bonus_weight = card.card_weight_to_take
+                            if not self.is_profit(weight_from_deck):
+                                if self.is_profit(bonus_weight):
                                     card.activate(game, pos_id)
-                                    print(f"Б Компьютер берёт карту с весом {weight}")
-                            else:
-                                weight_from_deck = game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0
-                                bonus_weight = card.card_weight_to_take
-                                if self.is_profit(weight_from_deck + bonus_weight):
+                                    print(f"Б Компьютер берёт карту с весом {bonus_weight}")
+                                elif self.is_profit(weight_from_deck + bonus_weight):
                                     card.activate(game, pos_id)
-                                    print(f"Б Компьютер берёт карту с весом {bonus_weight}+")
+                                    print(f"Б Компьютер берёт карту с весом {bonus_weight} (+{weight_from_deck})")
                             break
                 else:
-                    if self.get_count_cards() == 8:  # освобождаем место
+                    if self.get_count_cards() == 8 and game.deck.get_deck():  # освобождаем место
                         card.activate(game, pos_id)
                         print(f"Б Компьютер освобождает место")
 
@@ -72,7 +64,6 @@ class Computer(Player):
                     last_weight_card_id -= 1
                 if last_weight_card_id >= 0:  # Если существует такая карта
                     weight = self.deck[last_weight_card_id].get_weight()
-                    weight_from_deck = game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0
                     if self.is_profit(-weight):
                         card.activate(game, pos_id)
                         print(f"Б Компьютер удалил у себя карту с весом {weight}")
