@@ -64,7 +64,7 @@ class Background(pygame.sprite.Sprite):
     def draw_background(self, screen_for_draw):
         if self.player_defeats_count == 1:
             screen_for_draw.blit(self.background_image1, self.background_rect)
-        elif self.player_defeats_count == 2:
+        elif self.player_defeats_count == 2 or self.player_defeats_count == 3:
             screen_for_draw.blit(self.background_image2, self.background_rect)
         else:
             screen_for_draw.blit(self.background_image0, self.background_rect)

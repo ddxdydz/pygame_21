@@ -28,8 +28,8 @@ SOUND_PATHS = {
 }
 IMAGE_PATHS = {
     "menu_background": r"data\menu_background.png",
-    "player_profile": r"data\comp.png",
-    "computer_profile": r"data\player.png",
+    "player_profile": r"data\player.png",
+    "computer_profile": r"data\comp.png",
     "win_mark": r"data\win_marker.png",
     "1": r"data\1.png",
     "2": r"data\2.png",
