@@ -8,7 +8,11 @@ MESSAGES = {
     "THE COMPUTER WON THE GAME": "ВЫ ПРОИГРАЛИ ИГРУ",
     "THE PLAYER WON THE GAME": "ВЫ ВЫЙГРАЛИ ИГРУ",
     "card_limit": "Достигнуто максимальное \n        количество карт",
-    "empty_deck": "Колода пуста"
+    "empty_deck": "Колода пуста",
+    "no_bonus_card": "Такой карты нет в колоде",
+    "successfully_DeleteComputerCard": "Последняя карта компьютера удалена",
+    "successfully_PlayerComputerCard": "Последняя карта игрока удалена",
+    "failure_DeleteComputerCard": "Не удалось удалить карту"
 }
 COORDINATES_OF_POSITIONS = {
     "background": (0, 0),
@@ -30,6 +34,8 @@ IMAGE_PATHS = {
     "menu_background": r"data\menu_background.png",
     "player_profile": r"data\player.png",
     "computer_profile": r"data\comp.png",
+    "player_angry": r"data\player2.png",
+    "computer_angry": r"data\comp2.png",
     "win_mark": r"data\win_marker.png",
     "1": r"data\1.png",
     "2": r"data\2.png",
@@ -53,13 +59,18 @@ IMAGE_PATHS = {
     "lose_marker2": r"data\lose_marker2.png",
     "lose_marker1": r"data\lose_marker1.png",
     "lose_marker": r"data\lose_marker.png",
-    "player_angry": r"data\player2.png",
-    "computer_angry": r"data\comp2.png",
     "card_place2": r"data\card_place2.png",
     "card_place1": r"data\card_place1.png",
     "card_place": r"data\card_place.png",
-    "pass": r"data\pass.png"
+    "pass": r"data\pass.png",
+    "bonus_delete_computer_last_card": r"data\bonus_delete_comp.png",
+    "bonus_delete_player_last_card": r"data\bonus_delete_player.png",
+    "bonus_take_2": r"data\bonus_2.png",
+    "bonus_take_-2": r"data\bonus_-2.png",
+    "bonus_take_5": r"data\bonus_5.png",
+    "bonus_take_6": r"data\bonus_6.png"
 }
-CARDS_IDS = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "-1", "-2", "-3")
+WEIGHT_CARDS_IDS = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "-1", "-2", "-3")
+BONUS_TAKE_CARDS_IDS = ("2", "-2", "5", "6")
 BUTTON_PASS_PARAMETERS = (921, 309, 138, 212)  # (x, y, width, height)
 BUTTON_DECK_PARAMETERS = (1090, 310, 138, 212)

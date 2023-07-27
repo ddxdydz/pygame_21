@@ -31,12 +31,12 @@ class Game:
         self.deck.transfer_card_for_object(self.player)
         self.deck.transfer_card_for_object(self.computer)
 
-    def show_message(self, message, show_computer_first_card=True):
-        if show_computer_first_card:
-            self.computer.show_first_card()
+    def show_message(self, message, show_computer_cards=True):
+        if show_computer_cards:
+            self.computer.show_cards()
         self.draw(self.screen)
         self.messanger.show_message(message, self.screen)
-        self.computer.close_first_card()
+        self.computer.close_first_weight_card()
 
     def player_defeat(self):
         self.show_message(MESSAGES["computer_win"])
@@ -98,9 +98,9 @@ class Game:
         move_res = self.current_mover.get_a_move(events=events, game=self)
         if move_res == "get":
             if self.deck.get_count_cards() == 0:
-                self.show_message(MESSAGES["empty_deck"], show_computer_first_card=False)
+                self.show_message(MESSAGES["empty_deck"], show_computer_cards=False)
             elif self.current_mover.get_count_cards() == 8:
-                self.show_message(MESSAGES["card_limit"], show_computer_first_card=False)
+                self.show_message(MESSAGES["card_limit"], show_computer_cards=False)
             else:
                 self.deck.transfer_card_for_object(self.current_mover)
                 self.switch_mover()

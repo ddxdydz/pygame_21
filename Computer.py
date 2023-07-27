@@ -1,7 +1,9 @@
 import pygame
 
-from Player import Player
 from local import COORDINATES_OF_POSITIONS
+from Player import Player
+from WeightCard import WeightCard
+from BonusCardTake import BonusCardTake
 
 
 class Computer(Player):
@@ -9,19 +11,23 @@ class Computer(Player):
         super().__init__()
 
     def add_card(self, card):
+        card.open()
         self.deck.append(card)
         card_position = self.get_count_cards() - 1  # Получаем ид позиции карты
         card.switch_position(COORDINATES_OF_POSITIONS["computer_deck"][card_position])
-        if card_position != 0:
+        # Закрываем первую карту без бонуса:
+        self.close_first_weight_card()
+
+    def close_first_weight_card(self):
+        self.show_cards()
+        for card in self.deck:
+            if type(card) == WeightCard:
+                card.close()
+                break
+
+    def show_cards(self):
+        for card in self.deck:
             card.open()
-
-    def show_first_card(self):
-        if self.deck:
-            self.deck[0].open()
-
-    def close_first_card(self):
-        if self.deck:
-            self.deck[0].close()
 
     def get_a_move(self, *args, **kwargs):
         game = kwargs["game"]
@@ -34,6 +40,11 @@ class Computer(Player):
         # Если заполнена колода:
         if self.get_count_cards() == 8:
             print("Компьютер пропускает ход из-за пустой колоды")
+            return "pass"
+
+        # Если следующая карта бонусная:
+        if game.deck.deck[-1].is_bonus_card():
+            print("BonusCard")
             return "pass"
 
         # Количество очков при взятии следующей карты:
