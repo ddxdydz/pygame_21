@@ -12,7 +12,7 @@ MESSAGES = {
     "no_bonus_card": "Такой карты нет в колоде",
     "successfully_DeleteComputerCard": "Последняя карта компьютера удалена",
     "successfully_PlayerComputerCard": "Последняя карта игрока удалена",
-    "failure_DeleteComputerCard": "Не удалось удалить карту"
+    "failure_DeleteCard": "Не удалось удалить карту"
 }
 COORDINATES_OF_POSITIONS = {
     "background": (0, 0),

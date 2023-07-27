@@ -60,8 +60,13 @@ class Game:
 
     def is_all_passed(self):
         if self.computer.is_passed and self.player.is_passed:
-            if self.player.get_score() == self.computer.get_score() == 21:
+            if self.player.get_score() == self.computer.get_score():
                 self.round_draw()
+            elif self.player.get_score() > 21 and self.computer.get_score() > 21:
+                if self.computer.get_win_distance() < self.player.get_win_distance():
+                    self.player_defeat()
+                elif self.computer.get_win_distance() > self.player.get_win_distance():
+                    self.computer_defeat()
             elif self.player.get_score() > 21:
                 self.show_message(MESSAGES["out_of_range"])
                 self.player_defeat()

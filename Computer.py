@@ -1,9 +1,12 @@
 import pygame
+from time import sleep
 
 from local import COORDINATES_OF_POSITIONS
 from Player import Player
 from WeightCard import WeightCard
 from BonusCardTake import BonusCardTake
+from BonusDeletePlayerCard import BonusDeletePlayerCard
+from BonusDeleteComputerCard import BonusDeleteComputerCard
 
 
 class Computer(Player):
@@ -29,8 +32,70 @@ class Computer(Player):
         for card in self.deck:
             card.open()
 
+    def is_profit(self, next_weight):
+        next_score = self.get_score() + next_weight
+        next_win_distance = abs(21 - next_score)
+        if next_win_distance < self.get_win_distance() and next_score <= 21:
+            return True
+        return False
+
+    def check_bonus_cards(self, game):
+        for pos_id, card in enumerate(self.deck):
+
+            if type(card) == BonusCardTake:
+                # Проверяем наличие карты в колоде:
+                for deck_card_pos_id, deck_card in enumerate(game.deck.get_deck()):
+                    if type(deck_card) == WeightCard:
+                        if deck_card.get_weight() == card.card_weight_to_take:  # Если карта есть в колоде
+                            # если следующая карта из колоды не принесёт выгоды
+                            if not self.is_profit(game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0):
+                                # если применение карты принесёт выгоду
+                                weight = card.card_weight_to_take
+                                if self.is_profit(weight):
+                                    card.activate(game, pos_id)
+                                    print(f"Б Компьютер берёт карту с весом {weight}")
+                            else:
+                                weight_from_deck = game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0
+                                bonus_weight = card.card_weight_to_take
+                                if self.is_profit(weight_from_deck + bonus_weight):
+                                    card.activate(game, pos_id)
+                                    print(f"Б Компьютер берёт карту с весом {bonus_weight}+")
+                            break
+                else:
+                    if self.get_count_cards() == 8:  # освобождаем место
+                        card.activate(game, pos_id)
+                        print(f"Б Компьютер освобождает место")
+
+            elif type(card) == BonusDeleteComputerCard:
+                last_weight_card_id = len(self.deck) - 1
+                if last_weight_card_id == pos_id:  # если удаляемая карта идёт за бонусной
+                    last_weight_card_id -= 1
+                if last_weight_card_id >= 0:  # Если существует такая карта
+                    weight = self.deck[last_weight_card_id].get_weight()
+                    weight_from_deck = game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0
+                    if self.is_profit(-weight):
+                        card.activate(game, pos_id)
+                        print(f"Б Компьютер удалил у себя карту с весом {weight}")
+                    elif self.is_profit(weight_from_deck - weight) and not self.is_profit(weight_from_deck):
+                        card.activate(game, pos_id)
+                        print(f"Б Компьютер удалил у себя карту с весом {weight} для взятия карты из колоды")
+
+            elif type(card) == BonusDeletePlayerCard:
+                last_weight_card_id = len(game.player.deck) - 1
+                if last_weight_card_id == pos_id:  # если удаляемая карта идёт за бонусной
+                    last_weight_card_id -= 1
+                if last_weight_card_id >= 0:  # Если существует такая карта
+                    weight = game.player.deck[last_weight_card_id].get_weight()
+                    # если применение карты принесёт выгоду
+                    if not self.is_profit(-weight):
+                        card.activate(game, pos_id)
+                        print(f"Б Компьютер удалил у игрока карту с весом {weight}")
+
     def get_a_move(self, *args, **kwargs):
         game = kwargs["game"]
+
+        # Анализ бонусных карт
+        self.check_bonus_cards(game)
 
         # Если в колоде закончились карты:
         if game.deck.get_count_cards() == 0:
@@ -39,29 +104,17 @@ class Computer(Player):
 
         # Если заполнена колода:
         if self.get_count_cards() == 8:
-            print("Компьютер пропускает ход из-за пустой колоды")
+            print("Компьютер пропускает ход из-за превышения количества карт")
             return "pass"
 
         # Если следующая карта бонусная:
         if game.deck.deck[-1].is_bonus_card():
             print("BonusCard")
-            return "pass"
-
-        # Количество очков при взятии следующей карты:
-        next_score = self.get_score() + game.deck.deck[-1].get_weight()
-        # Если количество очков первышает лимит:
-        if next_score > 21:
-            print("Компьютер пропускает ход из-за лимита очков")
-            return "pass"
-        # Если следующая карта улучшает пложение:
-        next_win_distance = abs(21 - (self.get_score() + game.deck.deck[-1].get_weight()))
-        if next_win_distance < self.get_win_distance():
-            print("Компьютер улучшает своё положение")
             return "get"
 
-        # Если следующим ходом игрок победит:
-        if game.player.get_win_distance() < self.get_win_distance():
-            print("Компьютер берёт карту")
+        # Если следующая карта из колоды улучшает пложение:
+        if self.is_profit(game.deck.deck[-1].get_weight() if game.deck.get_deck() else 0):
+            print("Компьютер улучшает своё положение")
             return "get"
 
         print("Компьютер пропускает")
